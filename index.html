@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta tags untuk SEO agar terbaca lebih baik oleh mesin pencari -->
+    <meta name="description" content="Website Resmi SMA Negeri Harapan Bangsa - Membangun Masa Depan Gemilang">
+    <title>SMA Negeri Harapan Bangsa</title>
+    
+    <!-- Menggunakan CDN Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            scroll-behavior: smooth;
+        }
+        .hero-bg { 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1523050853063-bd80e2f5df97?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); 
+            background-size: cover; 
+            background-position: center; 
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <!-- Navigasi -->
+    <nav class="bg-blue-800 text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-tight">SMAN Harapan Bangsa</h1>
+            <!-- Menu Navigasi -->
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="#beranda" class="hover:text-blue-300 transition">Beranda</a></li>
+                <li><a href="#profil" class="hover:text-blue-300 transition">Profil</a></li>
+                <li><a href="#kontak" class="hover:text-blue-300 transition">Kontak</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="beranda" class="hero-bg h-screen flex items-center justify-center text-center text-white px-4">
+        <div class="max-w-3xl">
+            <h2 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">Membangun Masa Depan Gemilang</h2>
+            <p class="text-lg md:text-xl mb-8 opacity-90">Sekolah Menengah Atas Terbaik dengan Fasilitas Modern dan Kurikulum Unggulan.</p>
+            <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg" onclick="scrollToContact()">
+                Daftar Sekarang
+            </button>
+        </div>
+    </header>
+
+    <!-- Profil Guru (Card Section) -->
+    <section id="profil" class="py-20 container mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-800">Profil Guru Kami</h2>
+            <div class="w-24 h-1 bg-blue-600 mx-auto mt-4"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <!-- Guru 1 -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden text-center p-8 border-t-4 border-blue-500 hover:shadow-2xl transition">
+                <div class="w-28 h-28 bg-blue-100 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-blue-500">
+                    <span class="text-4xl">👨‍🏫</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Budi Santoso, M.Pd</h3>
+                <p class="text-blue-600 font-medium">Guru Matematika</p>
+                <p class="text-gray-500 mt-4 text-sm">Berdedikasi dalam mengembangkan logika berpikir siswa melalui angka.</p>
+            </div>
+            <!-- Guru 2 -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden text-center p-8 border-t-4 border-blue-500 hover:shadow-2xl transition">
+                <div class="w-28 h-28 bg-blue-100 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-blue-500">
+                    <span class="text-4xl">👩‍🏫</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Siti Aminah, S.Si</h3>
+                <p class="text-blue-600 font-medium">Guru Biologi</p>
+                <p class="text-gray-500 mt-4 text-sm">Ahli dalam ilmu alam dan lingkungan hidup untuk masa depan hijau.</p>
+            </div>
+            <!-- Guru 3 -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden text-center p-8 border-t-4 border-blue-500 hover:shadow-2xl transition">
+                <div class="w-28 h-28 bg-blue-100 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-blue-500">
+                    <span class="text-4xl">👨‍🏫</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Andi Wijaya, S.Kom</h3>
+                <p class="text-blue-600 font-medium">Guru Informatika</p>
+                <p class="text-gray-500 mt-4 text-sm">Membimbing siswa menguasai teknologi digital di era transformasi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Kontak & Pendaftaran -->
+    <section id="kontak" class="py-20 bg-slate-100">
+        <div class="container mx-auto px-4 max-w-2xl">
+            <div class="bg-white p-10 rounded-2xl shadow-xl border border-gray-100">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2 text-center">Hubungi Kami</h2>
+                <p class="text-center text-gray-500 mb-8">Punya pertanyaan? Kirimkan pesan kepada kami.</p>
+                
+                <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
+                        <input type="text" id="nameInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" placeholder="Masukkan nama Anda" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Email</label>
+                        <input type="email" id="emailInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" placeholder="nama@email.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pesan atau Pertanyaan</label>
+                        <textarea id="messageInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" rows="4" placeholder="Tuliskan pesan Anda..." required></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-800 text-white font-bold py-4 rounded-xl hover:bg-blue-900 transition shadow-lg active:scale-95 transform">
+                        Kirim Pesan Sekarang
+                    </button>
+                </form>
+
+                <!-- Feedback Message -->
+                <div id="feedbackMessage" class="mt-6 hidden p-4 rounded-xl text-center font-medium animate-pulse"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-b border-blue-800 pb-8 mb-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-2">SMAN Harapan Bangsa</h3>
+                    <p class="opacity-70">Jl. Pendidikan No. 123, Kota Harapan, Indonesia</p>
+                </div>
+                <div class="flex space-x-4 md:justify-end text-sm">
+                    <a href="#" class="hover:underline">Kebijakan Privasi</a>
+                    <a href="#" class="hover:underline">Syarat & Ketentuan</a>
+                </div>
+            </div>
+            <div class="text-center text-sm opacity-60">
+                <p>&copy; 2024 SMAN Harapan Bangsa. Projek Simulasi Mahasiswa.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fungsi scroll halus ke form kontak
+        function scrollToContact() {
+            const contactSection = document.getElementById('kontak');
+            if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Penanganan form submit secara dinamis
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('nameInput').value;
+            const email = document.getElementById('emailInput').value;
+            const message = document.getElementById('messageInput').value;
+            const feedback = document.getElementById('feedbackMessage');
+
+            // Simulasi proses pengiriman data (Front-end only)
+            if (name && email && message) {
+                feedback.textContent = `✅ Terima kasih, ${name}! Pesan Anda telah terkirim.`;
+                feedback.className = "mt-6 p-4 rounded-xl text-center font-medium bg-green-50 text-green-700 border border-green-200";
+                feedback.classList.remove('hidden');
+                
+                // Reset form setelah sukses
+                event.target.reset();
+                
+                // Sembunyikan pesan setelah 5 detik
+                setTimeout(() => {
+                    feedback.classList.add('hidden');
+                }, 5000);
+            } else {
+                feedback.textContent = "❌ Terjadi kesalahan. Mohon lengkapi data.";
+                feedback.className = "mt-6 p-4 rounded-xl text-center font-medium bg-red-50 text-red-700 border border-red-200";
+                feedback.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
