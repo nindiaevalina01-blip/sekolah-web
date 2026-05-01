@@ -35,6 +35,7 @@
             <ul class="hidden md:flex space-x-4 items-center">
                 <li><a href="#beranda" class="hover:text-blue-300 transition">Beranda</a></li>
                 <li><a href="#tentang" class="hover:text-blue-300 transition">Tentang Kami</a></li>
+                <li><a href="#identitas" class="hover:text-blue-300 transition">Identitas</a></li>
                 <li><a href="#profil" class="hover:text-blue-300 transition">Profil Guru</a></li>
                 <li><a href="#kontak" class="hover:text-blue-300 transition">Kontak</a></li>
                 <li>
@@ -53,7 +54,7 @@
 
     <!-- Modal Login -->
     <div id="loginModal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-[60]">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" onclick="closeLoginModal()"></div>
         <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto p-6">
             <div class="flex justify-between items-center pb-3">
                 <p class="text-2xl font-bold text-blue-800">Masuk ke Sistem</p>
@@ -70,12 +71,12 @@
                     <div class="mb-4">
                         <label class="block text-sm font-bold mb-2">Username</label>
                         <input type="text" id="username" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
-                        <p class="text-xs text-gray-500 mt-1" id="hintUser">masukkan username</p>
+                        <p class="text-xs text-gray-500 mt-1" id="hintUser">Guru: guru123</p>
                     </div>
                     <div class="mb-6">
                         <label class="block text-sm font-bold mb-2">Password</label>
                         <input type="password" id="password" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
-                        <p class="text-xs text-gray-500 mt-1" id="hintPass">Masukkan Password</p>
+                        <p class="text-xs text-gray-500 mt-1">Gunakan kata sandi Anda</p>
                     </div>
                     <button type="submit" class="w-full bg-blue-800 text-white py-3 rounded-lg font-bold hover:bg-blue-900 transition shadow-lg">Login Sekarang</button>
                 </form>
@@ -83,7 +84,40 @@
         </div>
     </div>
 
-    <!-- Dashboard Section (Hidden by Default) -->
+    <!-- Modal Kehadiran -->
+    <div id="attendanceModal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-[70]">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" onclick="closeAttendanceModal()"></div>
+        <div class="modal-container bg-white w-11/12 md:max-w-4xl mx-auto rounded-xl shadow-2xl z-50 overflow-hidden">
+            <div class="bg-blue-800 text-white p-6 flex justify-between items-center">
+                <h3 class="text-xl font-bold">Data Kehadiran Peserta Didik</h3>
+                <button onclick="closeAttendanceModal()" class="text-white text-2xl">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <p id="attendanceSub" class="mb-4 font-semibold text-gray-700"></p>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse bg-white">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 border text-left">No</th>
+                                <th class="p-3 border text-left">Nama Siswa</th>
+                                <th class="p-3 border text-center">Hadir</th>
+                                <th class="p-3 border text-center">Izin</th>
+                                <th class="p-3 border text-center">Sakit</th>
+                                <th class="p-3 border text-center">Alfa</th>
+                                <th class="p-3 border text-center">%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-50 text-right">
+                <button onclick="closeAttendanceModal()" class="bg-gray-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-gray-600">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
     <section id="dashboard" class="hidden py-10 bg-gray-100 min-h-screen">
         <div class="container mx-auto px-4">
             <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 mb-10 border-t-8 border-blue-800">
@@ -92,10 +126,18 @@
                         <h2 id="dashboardTitle" class="text-3xl font-bold text-gray-800">Dashboard</h2>
                         <p id="dashboardSub" class="text-gray-500">Selamat datang kembali di sistem akademik.</p>
                     </div>
-                    <button onclick="logout()" class="bg-red-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-600 transition shadow">Logout</button>
+                    <div class="flex gap-2">
+                        <!-- Tombol Kirim Tugas (Hanya terlihat oleh Siswa) -->
+                        <div id="siswaActions" class="hidden">
+                            <a href="https://forms.gle/LvbrQEGHE1iuHXVC8" target="_blank" class="bg-purple-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-purple-700 transition shadow flex items-center gap-2">
+                                📤 Kirim Tugas
+                            </a>
+                        </div>
+                        <button onclick="logout()" class="bg-red-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-600 transition shadow">Logout</button>
+                    </div>
                 </div>
 
-                <!-- Konten Jadwal (Untuk Guru & Siswa) -->
+                <!-- Konten Jadwal -->
                 <div class="mb-10">
                     <h3 class="text-xl font-bold mb-4 flex items-center gap-2">📅 Jadwal Pelajaran <span class="text-sm font-normal text-blue-600">(Senin - Jumat)</span></h3>
                     <div class="overflow-x-auto">
@@ -111,30 +153,34 @@
                                     <th class="p-3 border text-left">Jumat</th>
                                 </tr>
                             </thead>
-                            <tbody id="scheduleBody">
-                                <!-- Jadwal akan diisi oleh JS -->
-                            </tbody>
+                            <tbody id="scheduleBody"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Konten Khusus Guru (Input Nilai) -->
+                <!-- Konten Khusus Guru -->
                 <div id="guruOnly" class="hidden">
-                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">📝 Daftar Nilai Siswa</h3>
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">📝 Administrasi Siswa</h3>
                     <div class="flex flex-wrap items-center gap-4 mb-6 bg-blue-50 p-4 rounded-xl">
                         <div class="w-full md:w-64">
                             <label class="block text-sm font-bold mb-1">Pilih Kelas:</label>
                             <select id="selectKelas" onchange="renderSiswa()" class="w-full p-2 border rounded shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
                                 <option value="">-- Pilih Kelas --</option>
-                                <option value="X IPA 1">X IPA 1</option>
-                                <option value="X IPS 1">X IPS 1</option>
-                                <option value="XI IPA 1">XI IPA 1</option>
-                                <option value="XII IPA 1">XII IPA 1</option>
+                                <option value="Ia">Kelas Ia</option>
+                                <option value="Ib">Kelas Ib</option>
+                                <option value="II">Kelas II</option>
+                                <option value="III">Kelas III</option>
+                                <option value="IV">Kelas IV</option>
+                                <option value="V">Kelas V</option>
+                                <option value="VI">Kelas VI</option>
                             </select>
                         </div>
-                        <div class="flex items-end h-full">
+                        <div class="flex flex-wrap gap-2 items-end h-full">
                             <button onclick="generatePDF()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-bold transition flex items-center gap-2 shadow">
                                 📄 Cetak Nilai (PDF)
+                            </button>
+                            <button onclick="openAttendanceModal()" id="btnAbsen" class="hidden bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-bold transition flex items-center gap-2 shadow">
+                                📊 Lihat Kehadiran
                             </button>
                         </div>
                     </div>
@@ -154,9 +200,7 @@
                                     <th class="p-2 border">UAS</th>
                                 </tr>
                             </thead>
-                            <tbody id="studentBody">
-                                <!-- Baris siswa akan diisi oleh JS -->
-                            </tbody>
+                            <tbody id="studentBody"></tbody>
                         </table>
                     </div>
                 </div>
@@ -170,7 +214,7 @@
         <header id="beranda" class="hero-bg h-screen flex items-center justify-center text-center text-white px-4">
             <div class="max-w-3xl">
                 <h2 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">Membangun Masa Depan Gemilang</h2>
-                <p class="text-lg md:text-xl mb-8 opacity-90">Sekolah Menengah Atas Terbaik dengan Fasilitas Modern dan Kurikulum Unggulan.</p>
+                <p class="text-lg md:text-xl mb-8 opacity-90">SD Swasta Filadelfia School: Sekolah Dasar Terbaik dengan Kurikulum Unggulan.</p>
                 <div class="flex flex-col md:flex-row gap-4 justify-center">
                     <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg" onclick="scrollToContact()">
                         Hubungi Kami
@@ -194,17 +238,85 @@
                     <div class="p-6 bg-blue-50 rounded-2xl text-center">
                         <div class="text-4xl mb-4">📍</div>
                         <h3 class="text-xl font-bold mb-2">Lokasi Sekolah</h3>
-                        <p class="text-gray-600">Jl. Pendidikan No. 123, Kota Harapan, Indonesia</p>
+                        <p class="text-gray-600 text-sm">Jl. Udara Ujung, Desa Semagat, Kec. Merdeka</p>
                     </div>
                     <div class="p-6 bg-blue-50 rounded-2xl text-center">
                         <div class="text-4xl mb-4">🏫</div>
                         <h3 class="text-xl font-bold mb-2">Jumlah Kelas</h3>
-                        <p class="text-gray-600">Terdiri dari 7 Ruang Kelas (Kelas Ia,Ib,II,III,IV,V,VI )</p>
+                        <p class="text-gray-600 text-sm">7 Ruang Kelas (Ia, Ib, II, III, IV, V, VI)</p>
                     </div>
                     <div class="p-6 bg-blue-50 rounded-2xl text-center">
                         <div class="text-4xl mb-4">📚</div>
                         <h3 class="text-xl font-bold mb-2">Ekstrakurikuler</h3>
-                        <p class="text-gray-600"> Seni Tari, Bulutangkis, Futsal, Renang, Pramuka</p>
+                        <p class="text-gray-600 text-sm">Tari, Bulutangkis, Futsal, Renang, Pramuka</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Identitas Satuan Pendidikan -->
+        <section id="identitas" class="py-20 bg-gray-50 border-y border-gray-200">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold text-gray-800">Identitas Satuan Pendidikan</h2>
+                    <div class="w-24 h-1 bg-blue-600 mx-auto mt-4"></div>
+                </div>
+
+                <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <div class="p-8 border-b md:border-b-0 md:border-r border-gray-100 bg-blue-50/30">
+                            <h3 class="text-lg font-bold text-blue-800 mb-6 flex items-center gap-2">
+                                <span class="bg-blue-800 text-white p-1 rounded">📋</span> Informasi Umum
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-500 text-sm">Nama Sekolah</span>
+                                    <span class="text-gray-800 font-semibold text-right">SD Swasta Filadelfia School</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-500 text-sm">NPSN</span>
+                                    <span class="text-gray-800 font-semibold text-right">10239485</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-500 text-sm">Status Sekolah</span>
+                                    <span class="text-gray-800 font-semibold text-right">Swasta</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-500 text-sm">Akreditasi</span>
+                                    <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-bold">A (Sangat Baik)</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-500 text-sm">Kurikulum</span>
+                                    <span class="text-gray-800 font-semibold text-right">Merdeka & K-13</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-8">
+                            <h3 class="text-lg font-bold text-blue-800 mb-6 flex items-center gap-2">
+                                <span class="bg-blue-800 text-white p-1 rounded">📍</span> Alamat Sekolah
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex gap-4">
+                                    <div class="text-gray-400">🏢</div>
+                                    <p class="text-sm text-gray-700 leading-relaxed">
+                                        Jl. Udara Ujung, Desa Semangat, Kec. Merdeka, Kabupaten Karo, Sumatera Utara, 22115.
+                                    </p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="text-gray-400">📞</div>
+                                    <p class="text-sm text-gray-700">0812-3456-7890 (Tata Usaha)</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="text-gray-400">✉️</div>
+                                    <p class="text-sm text-gray-700">filadelfia.school@gmail.com</p>
+                                </div>
+                                <div class="mt-6">
+                                    <a href="https://maps.google.com" target="_blank" class="inline-block text-blue-600 hover:text-blue-800 font-bold text-sm underline decoration-blue-200 underline-offset-4">
+                                        Lihat Lokasi di Google Maps &rarr;
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -220,17 +332,17 @@
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden text-center p-8 border-t-4 border-blue-500 hover:shadow-2xl transition">
                     <div class="w-28 h-28 bg-blue-100 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-blue-500 text-4xl">👨‍🏫</div>
                     <h3 class="text-xl font-bold mb-2">Adevia Natasya Br semb, S.Pd</h3>
-                    <p class="text-blue-600 font-medium">Guru Matematika</p>
+                    <p class="text-blue-600 font-medium text-sm">Guru Matematika</p>
                 </div>
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden text-center p-8 border-t-4 border-blue-500 hover:shadow-2xl transition">
                     <div class="w-28 h-28 bg-blue-100 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-blue-500 text-4xl">👩‍🏫</div>
                     <h3 class="text-xl font-bold mb-2">Putri Darmawati Br Tarigan, S.Si</h3>
-                    <p class="text-blue-600 font-medium">Guru IPAS</p>
+                    <p class="text-blue-600 font-medium text-sm">Guru IPAS</p>
                 </div>
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden text-center p-8 border-t-4 border-blue-500 hover:shadow-2xl transition">
                     <div class="w-28 h-28 bg-blue-100 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-blue-500 text-4xl">👨‍🏫</div>
                     <h3 class="text-xl font-bold mb-2">Meilani Br Ginting, S.Kom</h3>
-                    <p class="text-blue-600 font-medium">Guru Informatika</p>
+                    <p class="text-blue-600 font-medium text-sm">Guru Informatika</p>
                 </div>
             </div>
         </section>
@@ -238,7 +350,7 @@
         <!-- Form Kontak -->
         <section id="kontak" class="py-20 bg-slate-100">
             <div class="container mx-auto px-4 max-w-2xl">
-                <div class="bg-white p-10 rounded-2xl shadow-xl border border-gray-100">
+                <div class="bg-white p-10 rounded-2xl shadow-xl">
                     <h2 class="text-3xl font-bold text-gray-800 mb-2 text-center">Hubungi Kami</h2>
                     <p class="text-center text-gray-500 mb-8">Punya pertanyaan? Kirimkan pesan kepada kami.</p>
                     
@@ -248,15 +360,15 @@
                     <form action="https://docs.google.com/forms/d/e/1FAIpQLSf8wyJHyKiK_KMCMlwp88ipL6pYBWyCob4AKXtl71aDfZldVA/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;" id="contactForm" class="space-y-6">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
-                            <input type="text" name="entry.559352220" id="nameInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="Masukkan nama Anda" required>
+                            <input type="text" name="entry.559352220" id="nameInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="Masukkan nama Anda" required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Email</label>
-                            <input type="email" name="entry.443565211" id="emailInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="nama@email.com" required>
+                            <input type="email" name="entry.443565211" id="emailInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="nama@email.com" required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Pesan atau Pertanyaan</label>
-                            <textarea name="entry.532312446" id="messageInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition" rows="4" placeholder="Tuliskan pesan Anda..." required></textarea>
+                            <textarea name="entry.532312446" id="messageInput" class="w-full px-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition" rows="4" placeholder="Tuliskan pesan Anda..." required></textarea>
                         </div>
                         <button type="submit" class="w-full bg-blue-800 text-white font-bold py-4 rounded-xl hover:bg-blue-900 transition shadow-lg active:scale-95 transform">
                             Kirim Pesan
@@ -275,7 +387,7 @@
     <footer class="bg-blue-900 text-white py-12">
         <div class="container mx-auto px-4 text-center">
             <h3 class="text-2xl font-bold mb-2">SD Swasta Filadelfia School</h3>
-            <p class="opacity-70 mb-4 text-sm">Jl. Udara Ujung,Desa Semagat, Kec. Merdeka, Indonesia</p>
+            <p class="opacity-70 mb-4 text-sm">Jl. Udara Ujung, Desa Semagat, Kec. Merdeka, Indonesia</p>
             <p class="text-xs opacity-50">&copy; Filadelfia School T.A 2025/2026.</p>
         </div>
     </footer>
@@ -288,15 +400,16 @@
             currentRole = role;
             const btnGuru = document.getElementById('btnTabGuru');
             const btnSiswa = document.getElementById('btnTabSiswa');
+            const hint = document.getElementById('hintUser');
             
             if(role === 'guru') {
                 btnGuru.className = "w-1/2 py-2 rounded-md font-bold transition bg-blue-800 text-white";
                 btnSiswa.className = "w-1/2 py-2 rounded-md font-bold transition text-gray-600";
-                document.getElementById('hintUser').innerText = "Guru: guru123";
+                hint.innerText = "Guru: guru123";
             } else {
                 btnSiswa.className = "w-1/2 py-2 rounded-md font-bold transition bg-blue-800 text-white";
                 btnGuru.className = "w-1/2 py-2 rounded-md font-bold transition text-gray-600";
-                document.getElementById('hintUser').innerText = "Siswa: siswa123";
+                hint.innerText = "Siswa: siswa123";
             }
         }
 
@@ -305,7 +418,6 @@
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
 
-            // Simple validation
             if ((currentRole === 'guru' && user === 'guru123' && pass === 'rahasia') ||
                 (currentRole === 'siswa' && user === 'siswa123' && pass === 'rahasia')) {
                 
@@ -313,14 +425,15 @@
                 document.getElementById('mainContent').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
                 
-                // Update Dashboard View
                 document.getElementById('dashboardTitle').innerText = `Dashboard ${currentRole.charAt(0).toUpperCase() + currentRole.slice(1)}`;
-                document.getElementById('dashboardSub').innerText = `Selamat datang, ini adalah halaman akademik Anda.`;
                 
+                // Kontrol tampilan berdasarkan Role
                 if(currentRole === 'guru') {
                     document.getElementById('guruOnly').classList.remove('hidden');
+                    document.getElementById('siswaActions').classList.add('hidden');
                 } else {
                     document.getElementById('guruOnly').classList.add('hidden');
+                    document.getElementById('siswaActions').classList.remove('hidden');
                 }
                 
                 renderSchedule();
@@ -333,9 +446,6 @@
         function logout() {
             document.getElementById('mainContent').classList.remove('hidden');
             document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('guruOnly').classList.add('hidden');
-            document.getElementById('tableNilaiWrapper').classList.add('hidden');
-            document.getElementById('selectKelas').value = "";
             window.scrollTo(0,0);
         }
 
@@ -352,23 +462,34 @@
             modal.classList.remove('opacity-100');
         }
 
+        function openAttendanceModal() {
+            const modal = document.getElementById('attendanceModal');
+            const kelas = document.getElementById('selectKelas').value;
+            document.getElementById('attendanceSub').innerText = `Kelas: ${kelas} | Periode: Semester Ganjil 2025`;
+            renderAttendanceTable();
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+        }
+
+        function closeAttendanceModal() {
+            const modal = document.getElementById('attendanceModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.classList.remove('opacity-100');
+        }
+
         // --- DASHBOARD RENDERERS ---
-        const subjects = ["Matematika", "B. Indonesia", "B. Inggris", "Agama", "Mulok", "Olah Raga", "PPKN", "IPAS", "Seni Budaya"];
+        const subjects = ["Matematika", "B. Indonesia", "B. Inggris", "Agama", "Mulok", "Olahraga", "PPKN", "IPAS", "Seni Budaya"];
 
         function renderSchedule() {
             const body = document.getElementById('scheduleBody');
             body.innerHTML = "";
-            
             let startTime = new Date();
-            startTime.setHours(8, 0, 0);
+            startTime.setHours(7, 30, 0);
 
-            for (let i = 1; i <= 7; i++) {
+            for (let i = 1; i <= 6; i++) {
                 const tr = document.createElement('tr');
-                tr.className = i % 2 === 0 ? "bg-gray-50" : "bg-white";
-                
-                // Hitung Waktu
                 let startStr = startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                startTime.setMinutes(startTime.getMinutes() + 45);
+                startTime.setMinutes(startTime.getMinutes() + 35);
                 let endStr = startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
                 
                 tr.innerHTML = `
@@ -382,18 +503,13 @@
                 `;
                 body.appendChild(tr);
 
-                // Tambahkan Istirahat (Setelah Jam 3 dan Jam 5)
-                if (i === 3 || i === 5) {
+                if (i === 3) {
                     const breakTr = document.createElement('tr');
                     breakTr.className = "bg-yellow-50 font-bold italic";
                     let bStart = startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
                     startTime.setMinutes(startTime.getMinutes() + 15);
                     let bEnd = startTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                    
-                    breakTr.innerHTML = `
-                        <td class="p-2 border" colspan="2">${bStart} - ${bEnd}</td>
-                        <td class="p-2 border text-center" colspan="5">ISTIRAHAT</td>
-                    `;
+                    breakTr.innerHTML = `<td class="p-2 border" colspan="2 text-center">${bStart} - ${bEnd}</td><td class="p-2 border text-center" colspan="5">ISTIRAHAT</td>`;
                     body.appendChild(breakTr);
                 }
             }
@@ -407,27 +523,55 @@
             const kelas = document.getElementById('selectKelas').value;
             const wrapper = document.getElementById('tableNilaiWrapper');
             const body = document.getElementById('studentBody');
+            const btnAbsen = document.getElementById('btnAbsen');
             
             if (!kelas) {
                 wrapper.classList.add('hidden');
+                btnAbsen.classList.add('hidden');
                 return;
             }
 
             wrapper.classList.remove('hidden');
+            btnAbsen.classList.remove('hidden');
             body.innerHTML = "";
 
             for (let i = 1; i <= 20; i++) {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="p-2 border text-center">${i}</td>
-                    <td class="p-2 border font-medium">Siswa Ke-${i} (${kelas})</td>
-                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center student-score" data-idx="${i}" data-col="n1"></td>
-                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center student-score" data-idx="${i}" data-col="n2"></td>
-                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center student-score" data-idx="${i}" data-col="n3"></td>
-                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center student-score" data-idx="${i}" data-col="n4"></td>
-                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center student-score" data-idx="${i}" data-col="quis"></td>
-                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center student-score" data-idx="${i}" data-col="uts"></td>
-                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center student-score" data-idx="${i}" data-col="uas"></td>
+                    <td class="p-2 border font-medium">Siswa Ke-${i} (Kelas ${kelas})</td>
+                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center" placeholder="0"></td>
+                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center" placeholder="0"></td>
+                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center" placeholder="0"></td>
+                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center" placeholder="0"></td>
+                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center" placeholder="0"></td>
+                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center" placeholder="0"></td>
+                    <td class="p-2 border"><input type="number" class="w-12 p-1 border text-center" placeholder="0"></td>
+                `;
+                body.appendChild(tr);
+            }
+        }
+
+        function renderAttendanceTable() {
+            const body = document.getElementById('attendanceBody');
+            const kelas = document.getElementById('selectKelas').value;
+            body.innerHTML = "";
+            for(let i=1; i<=20; i++) {
+                const h = Math.floor(Math.random() * 5) + 20;
+                const i_ = Math.floor(Math.random() * 2);
+                const s = Math.floor(Math.random() * 2);
+                const a = Math.floor(Math.random() * 1);
+                const perc = ((h / (h+i_+s+a)) * 100).toFixed(1);
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3 border">${i}</td>
+                    <td class="p-3 border font-medium">Siswa Ke-${i} (Kelas ${kelas})</td>
+                    <td class="p-3 border text-center">${h}</td>
+                    <td class="p-3 border text-center text-blue-600 font-bold">${i_}</td>
+                    <td class="p-3 border text-center text-orange-600 font-bold">${s}</td>
+                    <td class="p-3 border text-center text-red-600 font-bold">${a}</td>
+                    <td class="p-3 border text-center bg-gray-50 font-bold">${perc}%</td>
                 `;
                 body.appendChild(tr);
             }
@@ -442,22 +586,16 @@
             doc.setFontSize(18);
             doc.text("DAFTAR NILAI SISWA", 105, 15, null, null, "center");
             doc.setFontSize(12);
-            doc.text(`Sekolah: SMAN Harapan Bangsa | Kelas: ${kelas}`, 105, 22, null, null, "center");
+            doc.text(`SD Swasta Filadelfia School | Kelas: ${kelas}`, 105, 22, null, null, "center");
 
-            const table = document.getElementById("tableNilai");
-            
-            // Ambil data dari input manual
             const rows = [];
             const trs = document.querySelectorAll("#studentBody tr");
             trs.forEach(tr => {
                 const rowData = [];
-                const tdName = tr.cells[1].innerText;
                 rowData.push(tr.cells[0].innerText);
-                rowData.push(tdName);
-                
+                rowData.push(tr.cells[1].innerText);
                 const inputs = tr.querySelectorAll('input');
                 inputs.forEach(input => rowData.push(input.value || "0"));
-                
                 rows.push(rowData);
             });
 
@@ -469,10 +607,9 @@
                 headStyles: { fillColor: [30, 58, 138] }
             });
 
-            doc.save(`Nilai_Siswa_${kelas}.pdf`);
+            doc.save(`Nilai_Siswa_Kelas_${kelas}.pdf`);
         }
 
-        // --- EXISTING WEB HELPERS ---
         function scrollToContact() {
             document.getElementById('kontak').scrollIntoView({ behavior: 'smooth' });
         }
@@ -480,7 +617,6 @@
         function showSuccess() {
             document.getElementById('contactForm').classList.add('hidden');
             document.getElementById('successMsg').classList.remove('hidden');
-            document.getElementById('contactForm').reset();
             submitted = false;
         }
     </script>
